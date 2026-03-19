@@ -32,6 +32,9 @@ export const Signup = () => {
           height: "100vh",
           alignItems: "center",
           justifyContent: "center",
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')",
+          backgroundSize: "cover",
         }}
       >
         <div
@@ -40,13 +43,22 @@ export const Signup = () => {
             flexDirection: "column",
             gap: "10px",
             width: "30%",
-
+            height: "45%",
             padding: "15px",
-            border: "1px solid black",
-            borderRadius: "12px",
+            border: "3px solid",
+            borderImage: "linear-gradient(to right, #358395, #ffffff) 1",
+            borderRadius: "10px",
+            backgroundColor: "rgba(131, 210, 223, 0.4)",
           }}
         >
-          <label style={{}}>Enter your Name:</label>
+          <img
+            src="https://img.icons8.com/?size=100&id=79041&format=png&color=000000"
+            alt=""
+            style={{ width: "40px", height: "50px", alignSelf: "center" }}
+          />
+          <label style={{ fontSize: "16px", fontWeight: "bold" }}>
+            Enter your Name:
+          </label>
           <input
             className=""
             type="text"
@@ -54,7 +66,9 @@ export const Signup = () => {
             required
             onChange={(e) => setUsername(e.target.value)}
           />
-          <label style={{}}>Enter your Email:</label>
+          <label style={{ fontSize: "16px", fontWeight: "bold" }}>
+            Enter your Email:
+          </label>
           <input
             className=""
             type="text"
@@ -62,7 +76,9 @@ export const Signup = () => {
             required
             onChange={(e) => setEmail(e.target.value)}
           />
-          <label>Enter your Password:</label>
+          <label style={{ fontSize: "16px", fontWeight: "bold" }}>
+            Enter your Password:
+          </label>
           <input
             className=""
             type="password"
@@ -70,15 +86,18 @@ export const Signup = () => {
             required
             onChange={(e) => setPassword(e.target.value)}
           />
-          <label>Enter your Password again:</label>
+          <label style={{ fontSize: "16px", fontWeight: "bold" }}>
+            Enter your Password again:
+          </label>
           <input className="" type="text" required />
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             style={{
               padding: "8px 0px",
               fontWeight: "bold",
               fontSize: "16px",
-              marginBottom: "10px",
+              borderRadius: "10px",
+              color: "white",
+              backgroundColor: "rgba(66, 164, 186, 0.8)",
             }}
             onClick={(e) => handleRegister(e)}
           >

@@ -17,12 +17,14 @@ function Login() {
           password: password,
         },
       );
-      console.log("User: logged in", res.data);
+
       if (res) {
+        localStorage.setItem("token", JSON.stringify(res.data));
         navigate("/"); // redirect to landing page after successful login
       }
     } catch (error: any) {
       alert("error:" + error.response.data.detail);
+      setMessage(error.response.data.detail);
       console.error("error:", error.response.data);
       setPassword("");
     }
@@ -97,6 +99,7 @@ function Login() {
           >
             Login
           </button>
+          <p>{message}</p>
           <a style={{ alignSelf: "center", color: "blue" }}>
             {" "}
             forget password?

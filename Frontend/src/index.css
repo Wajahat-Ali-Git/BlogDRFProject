@@ -4,3 +4,109 @@ body {
   padding: 0;
   height: 120vh;
 }
+a {
+  text-decoration: none;
+  color: white;
+}
+.show-category {
+  color: white;
+  left: 57px;
+  cursor: pointer;
+}
+ul {
+  position: absolute;
+  background-color: black;
+  border-radius: 4px;
+  padding: 5px;
+  z-index: 2;
+  top: 20px;
+  left: 57px;
+  cursor: pointer;
+}
+ul:hover {
+  visibility: visible;
+}
+li {
+  color: white;
+  list-style: none;
+}
+
+li:hover {
+  font-weight: 400;
+  color: aqua;
+  list-style: none;
+}
+
+@import "tailwindcss";
+
+:root {
+  background-color: #101011;
+  width: 100%;
+}
+
+.swiper {
+  width: 98%;
+  height: 400px;
+  position: relative;
+  right: 0;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: 12px;
+  opacity: 0.8;
+}
+.custom-swiper .swiper-button-prev {
+  /* center the arrow inside */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff; /* arrow color */
+  font-weight: 600;
+  font-size: 20px !important; /* increase/decrease arrow size */
+  height: 20px;
+  width: 30px;
+}
+.custom-swiper .swiper-button-next {
+  /* center the arrow inside */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff; /* arrow color */
+  font-weight: 600;
+  font-size: 20px !important; /* increase/decrease arrow size */
+  height: 20px;
+  width: 30px;
+}
+.custom-swiper .swiper-button-next::after,
+.custom-swiper .swiper-button-prev::after {
+  font-size: 28px; /* increase/decrease arrow size */
+  font-weight: bold;
+  color: #ffffff !important; /* arrow color */
+}
+
+/* Change bullets to bars */
+.custom-swiper .swiper-pagination-bullet {
+  width: 30px; /* bar length */
+  height: 6px; /* bar thickness */
+  border-radius: 3px; /* rounded edges */
+  background: #26272d; /* inactive bar color */
+  opacity: 1; /* make sure it’s fully visible */
+  transition: all 0.3s ease;
+  margin: 0 4px !important; /* space between bars */
+}
+
+/* Active bar color */
+.custom-swiper .swiper-pagination-bullet-active {
+  background: #ffffff; /* active bar color */
+}
+.nft-slider {
+  height: 200px;
+}
+.custom-swiper {
+  --swiper-navigation-size: 10px; /* control arrow size globally */
+}

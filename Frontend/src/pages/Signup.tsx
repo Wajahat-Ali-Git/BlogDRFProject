@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 export const Signup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      navigate("/"); // redirect to landing page if token exists
+    }
+  }, []);
 
   const handleRegister = async (e: any) => {
     e.preventDefault();
@@ -25,87 +34,80 @@ export const Signup = () => {
   return (
     <>
       <div
+        className="flex flex-col w-full h-screen items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          height: "100vh",
-          alignItems: "center",
-          justifyContent: "center",
           backgroundImage:
             "url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80')",
-          backgroundSize: "cover",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            width: "30%",
-            height: "45%",
-            padding: "15px",
-            border: "3px solid",
-            borderImage: "linear-gradient(to right, #358395, #ffffff) 1",
-            borderRadius: "10px",
-            backgroundColor: "rgba(131, 210, 223, 0.4)",
-          }}
-        >
+        <div className="flex flex-col gap-4 w-full max-w-md p-8 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl">
           <img
             src="https://img.icons8.com/?size=100&id=79041&format=png&color=000000"
-            alt=""
-            style={{ width: "40px", height: "50px", alignSelf: "center" }}
+            alt="logo"
+            className="w-12 h-14 self-center mb-2"
           />
-          <label style={{ fontSize: "16px", fontWeight: "bold" }}>
-            Enter your Name:
-          </label>
-          <input
-            className=""
-            type="text"
-            value={username}
-            required
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <label style={{ fontSize: "16px", fontWeight: "bold" }}>
-            Enter your Email:
-          </label>
-          <input
-            className=""
-            type="text"
-            value={email}
-            required
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <label style={{ fontSize: "16px", fontWeight: "bold" }}>
-            Enter your Password:
-          </label>
-          <input
-            className=""
-            type="password"
-            value={password}
-            required
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <label style={{ fontSize: "16px", fontWeight: "bold" }}>
-            Enter your Password again:
-          </label>
-          <input className="" type="text" required />
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-bold text-white uppercase tracking-wider">
+              Full Name
+            </label>
+            <input
+              className="w-full rounded-lg py-2 px-3 bg-white/20 border border-white/30 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"
+              type="text"
+              placeholder="Enter your name"
+              value={username}
+              required
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-bold text-white uppercase tracking-wider">
+              Email Address
+            </label>
+            <input
+              className="w-full rounded-lg py-2 px-3 bg-white/20 border border-white/30 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              required
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-bold text-white uppercase tracking-wider">
+              Password
+            </label>
+            <input
+              className="w-full rounded-lg py-2 px-3 bg-white/20 border border-white/30 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"
+              type="password"
+              placeholder="Create a password"
+              value={password}
+              required
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-bold text-white uppercase tracking-wider">
+              Confirm Password
+            </label>
+            <input
+              className="w-full rounded-lg py-2 px-3 bg-white/20 border border-white/30 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"
+              type="password"
+              placeholder="Confirm your password"
+              required
+            />
+          </div>
           <button
-            style={{
-              padding: "8px 0px",
-              fontWeight: "bold",
-              fontSize: "16px",
-              borderRadius: "10px",
-              color: "white",
-              backgroundColor: "rgba(66, 164, 186, 0.8)",
-            }}
+            className="w-full mt-4 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-xl shadow-lg transition-all active:scale-95"
             onClick={(e) => handleRegister(e)}
           >
-            Register
+            Create Account
           </button>
-          <a style={{ alignSelf: "center", color: "blue" }}>
-            {" "}
-            Back to login page
+
+          <a
+            className="self-center text-cyan-300 hover:text-white text-sm cursor-pointer transition-colors mt-2"
+            onClick={() => (window.location.href = "/login")}
+          >
+            Already have an account? Login
           </a>
         </div>
       </div>

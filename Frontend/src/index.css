@@ -1,6 +1,76 @@
-body {
-  background-color: white;
-  margin: 0;
-  padding: 0;
-  height: 120vh;
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #358395;
+  --color-secondary: #ffffff;
+  --color-bg-dark: #101011;
+}
+
+@layer base {
+  body {
+    @apply bg-white m-0 p-0 min-h-screen transition-colors duration-300;
+  }
+  
+  a {
+    @apply no-underline text-white;
+  }
+}
+
+@layer utilities {
+  .border-gradient-b {
+    border-bottom: 3px solid;
+    border-image: linear-gradient(to right, var(--color-primary), var(--color-secondary)) 1;
+  }
+}
+
+/* Swiper Customizations - kept for better control and scoping */
+.swiper {
+  width: 98%;
+  height: 400px;
+  position: relative;
+  right: 0;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: 12px;
+  opacity: 0.8;
+}
+
+.custom-swiper .swiper-button-prev,
+.custom-swiper .swiper-button-next {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff !important;
+  font-weight: 600;
+  height: 20px;
+  width: 30px;
+}
+
+.custom-swiper .swiper-button-next::after,
+.custom-swiper .swiper-button-prev::after {
+  font-size: 28px !important;
+  font-weight: bold;
+  color: #ffffff !important;
+}
+
+.custom-swiper .swiper-pagination-bullet {
+  width: 30px;
+  height: 6px;
+  border-radius: 3px;
+  background: #26272d;
+  opacity: 1;
+  transition: all 0.3s ease;
+  margin: 0 4px !important;
+}
+
+.custom-swiper .swiper-pagination-bullet-active {
+  background: #ffffff;
+}
+
+.custom-swiper {
+  --swiper-navigation-size: 10px;
 }

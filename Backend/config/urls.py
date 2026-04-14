@@ -23,4 +23,5 @@ urlpatterns = [
     path(
         "api/accounts/", include("accounts.urls")
     ),  # JWT endpoints under /api/accounts/
+    path("api/blog/", include("blog.urls")),  # Blog endpoints under /api/blog/
 ]

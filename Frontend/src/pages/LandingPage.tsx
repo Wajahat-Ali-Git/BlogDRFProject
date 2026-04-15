@@ -1,4 +1,4 @@
-import { useState } from "react";
+// no hooks needed in this page
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -6,16 +6,14 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css"; // core Swiper styles
 import "swiper/css/navigation"; // optional
 import "swiper/css/pagination"; // optional
-
+import { categories } from "../constants/constant";
 import slideImage1 from "../assets/slider1.jpg";
-import SportsImg from "../assets/sports.jpg";
-import EsportsImg from "../assets/Esports.jpg";
-import extra from "../assets/extra.jpg";
+import Header from "../components/Header";
+//import extra from "../assets/extra.jpg";
 
 export default function LandingPage() {
   const navigate = useNavigate();
   const data = localStorage.getItem("token");
-  const [isVisible, setIsvisible] = useState(false);
 
   const popularPosts = [
     {
@@ -66,84 +64,17 @@ export default function LandingPage() {
       <div>
         <h1>Welcome to the Blog App {username}</h1>
         <pre>
-          Please{" "}
-          <a
-            onClick={() => navigate("/login")}
-            className="text-cyan-300 hover:text-white"
-          >
-            Login
-          </a>{" "}
-          to continue.
+          Please <b>Login</b> to continue.
         </pre>
       </div>
     );
   }
   return (
     <div className="relative bg-black min-h-screen">
-      <section className="header relative flex flex-row gap-5 items-center justify-between bg-black w-full border-gradient-b">
-        <div className="app-details flex items-center">
-          {" "}
-          <img
-            src="https://img.icons8.com/?size=100&id=79041&format=png&color=000000"
-            alt="logo"
-            className="w-[55px] h-[60px]"
-          />
-          <h1
-            onClick={() => navigate("/login")}
-            className="text-[24px] text-white cursor-pointer"
-          >
-            BLOG App
-          </h1>
-        </div>
-        <div className="navbar relative flex gap-5 text-white mr-[10%] items-center">
-          <a className="hover:text-primary transition-colors" href="">
-            Home
-          </a>
-          <p
-            className="ml-[57px] cursor-pointer hover:text-primary transition-colors"
-            onClick={() => setIsvisible(!isVisible)}
-          >
-            Categories{" "}
-          </p>
-          {isVisible && (
-            <ul className="absolute bg-black rounded p-1 z-[2] top-5 left-[57px] cursor-pointer border border-gray-800">
-              <li
-                className="text-white hover:text-cyan-400 p-1 px-4 transition-colors"
-                onClick={() => navigate("/fashion")}
-              >
-                Fashion Blogs
-              </li>
-              <li
-                className="text-white hover:text-cyan-400 p-1 px-4 transition-colors"
-                onClick={() => navigate("/sports")}
-              >
-                Sports Blogs
-              </li>
-              <li
-                className="text-white hover:text-cyan-400 p-1 px-4 transition-colors"
-                onClick={() => navigate("/esports")}
-              >
-                E-Sports Blogs
-              </li>
-              <li
-                className="text-white hover:text-cyan-400 p-1 px-4 transition-colors"
-                onClick={() => navigate("/entertainment")}
-              >
-                Entertainment Blogs
-              </li>
-            </ul>
-          )}
-          <a className="hover:text-primary transition-colors" href="">
-            About
-          </a>
-          <a className="hover:text-primary transition-colors" href="">
-            Help
-          </a>
-        </div>
-      </section>
+      <Header />
       <section className="mt-0 h-[400px] w-full bg-black">
         <Swiper
-          className="custom-swiper"
+          className="hero-swiper custom-swiper"
           slidesPerView={1}
           modules={[Navigation, Pagination, Autoplay]}
           autoplay={{ delay: 3000 }}
@@ -169,74 +100,67 @@ export default function LandingPage() {
           </SwiperSlide>
         </Swiper>
         <div className="bg-black text-white">
-          <div className="px-[2%] py-4">
-            <h1 className="text-3xl font-bold">
+          <div className="px-[2%] py-8">
+            <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent">
               Welcome to our Blog App {username}
             </h1>
-            <p className="ml-[10%] text-gray-400">
-              what bring you to our blog app today{" "}
+            <p className="ml-[2%] mt-2 text-gray-400 text-lg">
+              What brings you to our blog app today?
             </p>
           </div>
           <div>
             <Swiper
-              className="custom-swiper h-auto my-0 mx-5"
+              className="my-4 px-5 overflow-visible"
               slidesPerView={5}
-              modules={[Navigation, Pagination, Autoplay]}
-              autoplay={{ delay: 3000 }}
-              loop={true}
+              spaceBetween={20}
+              loop
+              autoplay={{ delay: 2500 }}
               navigation
               pagination={{ clickable: true }}
-              spaceBetween={16}
+              modules={[Navigation, Pagination, Autoplay]}
+              breakpoints={{
+                320: { slidesPerView: 1.0, spaceBetween: 15 },
+                640: { slidesPerView: 3, spaceBetween: 18 },
+                768: { slidesPerView: 3, spaceBetween: 20 },
+                1024: { slidesPerView: 5, spaceBetween: 24 },
+              }}
             >
-              <SwiperSlide className="flex flex-col gap-5">
-                <img src={SportsImg} alt="1" className="rounded-xl" />
-                <h1 className="flex bg-green-600/50 text-white rounded-md justify-center py-1">
-                  Sports
-                </h1>
-              </SwiperSlide>
+              {categories.map((item: any, index: any) => (
+                <SwiperSlide key={index} className="py-4">
+                  <div
+                    onClick={() => navigate(item.route)}
+                    className="group relative rounded-2xl overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer"
+                  >
+                    {/* Image */}
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-32 sm:h-40 md:h-48 object-cover transform transition-transform duration-700 group-hover:scale-110"
+                    />
 
-              <SwiperSlide className="flex flex-col gap-5">
-                <img src={EsportsImg} alt="1" className="rounded-xl" />
-                <h1
-                  className="flex bg-black/50 text-white rounded-md justify-center py-1"
-                  style={{ color: "white " }}
-                >
-                  Esports
-                </h1>
-              </SwiperSlide>
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
 
-              <SwiperSlide className="flex flex-col gap-5">
-                <img src={extra} alt="1" className="rounded-xl" />
-                <h1
-                  style={{ color: "white " }}
-                  className="flex bg-red-600/50 text-white rounded-md justify-center py-1"
-                >
-                  Fashion
-                </h1>
-              </SwiperSlide>
-
-              <SwiperSlide className="flex flex-col gap-5">
-                <img src={EsportsImg} alt="1" className="h-[90%] rounded-xl" />
-                <h1 className="flex bg-orange-600/50 text-white rounded-md justify-center py-1">
-                  Entertainment
-                </h1>
-              </SwiperSlide>
-
-              <SwiperSlide className="flex flex-col gap-5">
-                <img src={SportsImg} alt="1" className="rounded-xl" />
-                <h1 className="flex bg-gray-600/50 text-white rounded-md justify-center py-1">
-                  Others
-                </h1>
-              </SwiperSlide>
+                    {/* Title Overlay */}
+                    <div className="absolute inset-0 flex items-end justify-center pb-6 px-2">
+                      <span
+                        className={`px-4 py-1.5 rounded-lg text-white text-sm font-bold tracking-wide shadow-2xl backdrop-blur-md border border-white/20 transition-all duration-300 group-hover:px-6 ${item.bg}`}
+                      >
+                        {item.title}
+                      </span>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
         </div>
-        <div className="popular-post flex flex-col bg-black text-white justify-center items-center py-[50px] px-[20%]">
+        <div className="popular-post flex flex-col bg-black text-white justify-center items-center py-[50px] px-6 md:px-[20%]">
           <h1 className="text-2xl font-bold mb-8">Popular Posts</h1>
           <Swiper
             className="custom-swiper w-full"
             slidesPerView={1}
-            modules={[Pagination, Autoplay]}
+            modules={[Navigation, Autoplay]}
             autoplay={{ delay: 4000 }}
             loop={true}
             pagination={{ clickable: true }}
@@ -254,7 +178,10 @@ export default function LandingPage() {
                 <p className="opacity-80 font-medium text-[16px] px-1.5 leading-relaxed">
                   {post.content}
                 </p>
-                <h1 className="flex bg-gray-600/50 text-white rounded-md justify-center py-1 mt-4">
+                <h1
+                  onClick={() => navigate("/posts?category=others")}
+                  className="flex bg-gray-600/50 text-white rounded-md justify-center py-1 mt-4 cursor-pointer hover:bg-gray-600 transition-colors"
+                >
                   Others
                 </h1>
               </SwiperSlide>

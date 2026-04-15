@@ -9,12 +9,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(
-        source="category.name", read_only=True
-    )  # to show category name instead of id
-    author_name = serializers.CharField(
-        source="author.username", read_only=True
-    )  # to show author name instead of id
+    category_name = serializers.CharField(source="category.name", read_only=True)
+    author_name = serializers.CharField(source="author.username", read_only=True)
 
     class Meta:
         model = Post
@@ -26,6 +22,7 @@ class PostSerializer(serializers.ModelSerializer):
             "author_name",
             "category",
             "category_name",
+            "image",
             "created_at",
             "is_published",
         ]

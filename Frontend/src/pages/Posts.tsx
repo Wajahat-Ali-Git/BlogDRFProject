@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import axios from "axios";
+import { api } from "../services/TokenAuth";
 import Header from "../components/Header";
 import { useLocation } from "react-router-dom";
 
@@ -29,10 +29,8 @@ const Posts = () => {
 
   const handlegetPosts = async (category?: string) => {
     try {
-      const url = category
-        ? `http://localhost:8000/api/blog/posts/?category=${category}`
-        : "http://localhost:8000/api/blog/posts/";
-      const res = await axios.get(url);
+      const url = category ? `blog/posts/?category=${category}` : "blog/posts/";
+      const res = await api.get(url);
       console.log("Posts fetched successfully", res.data);
       setData(res.data);
     } catch (error: any) {
@@ -129,6 +127,9 @@ const Posts = () => {
                       sx={{ color: "red" }}
                     >
                       <FavoriteIcon />
+                      <sub className="text-red/70 text-sm">
+                        {post?.likes_count || 0}
+                      </sub>
                     </IconButton>
                     <IconButton
                       aria-label="share"

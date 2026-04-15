@@ -11,6 +11,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source="category.name", read_only=True)
     author_name = serializers.CharField(source="author.username", read_only=True)
+    likes_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -25,4 +26,8 @@ class PostSerializer(serializers.ModelSerializer):
             "image",
             "created_at",
             "is_published",
+            "likes_count",
         ]
+
+    def get_likes_count(self, obj):
+        return obj.likes.count()

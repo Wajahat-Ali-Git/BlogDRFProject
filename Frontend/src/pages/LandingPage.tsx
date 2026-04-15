@@ -119,7 +119,7 @@ export default function LandingPage() {
               pagination={{ clickable: true }}
               modules={[Navigation, Pagination, Autoplay]}
               breakpoints={{
-                320: { slidesPerView: 1.2, spaceBetween: 15 },
+                320: { slidesPerView: 1.0, spaceBetween: 15 },
                 640: { slidesPerView: 3, spaceBetween: 18 },
                 768: { slidesPerView: 3, spaceBetween: 20 },
                 1024: { slidesPerView: 5, spaceBetween: 24 },
@@ -160,7 +160,7 @@ export default function LandingPage() {
           <Swiper
             className="custom-swiper w-full"
             slidesPerView={1}
-            modules={[Pagination, Autoplay]}
+            modules={[Navigation, Autoplay]}
             autoplay={{ delay: 4000 }}
             loop={true}
             pagination={{ clickable: true }}

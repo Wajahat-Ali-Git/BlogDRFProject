@@ -37,7 +37,7 @@ export const categories = [
     title: "Others",
     image: others,
     bg: "bg-gray-600/50",
-    route: "/posts?category=others",
+    route: "/posts?category=",
     slug: "others",
   },
 ];

@@ -1,5 +1,4 @@
-import Icon from "@mui/material/Icon/Icon";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CiLogout } from "react-icons/ci";
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -21,10 +20,11 @@ const Header = () => {
           src="https://img.icons8.com/?size=100&id=79041&format=png&color=FFFFFF"
           alt="logo"
           className="w-[55px] h-[60px]"
+          onClick={() => navigate("/")}
         />
         <h1
-          onClick={() => navigate("/login")}
-          className="text-sm md:text-lg font-bold md:text-[24px] text-white cursor-pointer"
+          onClick={() => navigate("/")}
+          className="text-[12px] md:text-lg font-bold md:text-[24px] text-white cursor-pointer"
         >
           BLOG App
         </h1>
@@ -73,7 +73,7 @@ const Header = () => {
         <a className="hover:text-primary transition-colors" href="">
           Help
         </a>
-        <span className="font-[800] text-cyan-300 hover:text-cyan-500/80 transition-colors ">
+        <span className="cursor-pointer font-[800] text-cyan-300 hover:text-cyan-500/80 transition-colors ">
           {username}
         </span>
         <CiLogout

@@ -4,6 +4,10 @@ from .serializers import PostSerializer, CategorySerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 
 from rest_framework.permissions import BasePermission
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .models import Like, Post
 
 
 class IsAuthorOrReadOnly(BasePermission):
@@ -43,3 +47,18 @@ class PostdetailAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+
+class ToggleLikeAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, post_id):
+        user = request.user
+        post = Post.objects.get(id=post_id)
+
+        like, created = Like.objects.get_or_create(user= user, post=post)
+        if not created :
+            like.delete()
+            return Response({"message": "Unliked"})
+        return Response({"message": "Liked"})
+
+

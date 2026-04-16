@@ -1,13 +1,10 @@
-import React, { use, useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import "swiper/css"; // core Swiper styles
-import "swiper/css/navigation"; // optional
-import "swiper/css/pagination"; // optional
+import { useEffect, useState } from "react";
+import { IconButton, Typography } from "@mui/material";
+import { Favorite as FavoriteIcon } from "@mui/icons-material";
+import { Share as ShareIcon } from "@mui/icons-material";
 import Header from "../components/Header";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
-import { Typography } from "@mui/material";
+import { api } from "../services/TokenAuth";
 
 const PostDetails = () => {
   type PostType = {
@@ -17,15 +14,16 @@ const PostDetails = () => {
     author_name: string;
     created_at: string;
     image: string;
+    likes_count: number;
   };
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const postId = params.get("id");
   const [post, setPost] = useState<PostType | null>(null);
-  const url = postId ? `http://localhost:8000/api/blog/posts/${postId}/` : "";
+  const url = postId ? `blog/posts/${postId}/` : "";
   const handlePostDetails = async () => {
     try {
-      const res = await axios.get(url);
+      const res = await api.get(url);
       console.log("Post details fetched successfully", res.data);
       setPost(res.data);
     } catch (error) {
@@ -35,6 +33,18 @@ const PostDetails = () => {
   useEffect(() => {
     handlePostDetails();
   }, [postId]);
+
+  const handleLikeClick = async (postId: number) => {
+    try {
+      console.log("Liking post with ID:", postId);
+      await api.post(`blog/posts/${postId}/like/`, {});
+
+      // refresh post OR update UI manually
+      handlePostDetails();
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="bg-black h-min-[100vh] h-max-auto gap-5 flex flex-col pb-10">
@@ -67,6 +77,22 @@ const PostDetails = () => {
         <Typography sx={{ color: "white" }} variant="body2">
           by: <span className="text-gray-300">{post?.author_name}</span>{" "}
         </Typography>
+        <div className="flex justify-end">
+          <IconButton
+            aria-label="add to favorites"
+            sx={{ color: "red" }}
+            className=""
+            onClick={() => handleLikeClick(postId ? parseInt(postId) : 0)}
+          >
+            <FavoriteIcon />
+            <sub className="text-white/70 text-sm">
+              {post?.likes_count || 0}
+            </sub>
+          </IconButton>
+          <IconButton aria-label="share" sx={{ color: "blue" }} className="">
+            <ShareIcon />
+          </IconButton>
+        </div>
         <Typography sx={{ color: "white", opacity: "90%" }} variant="body2">
           {post?.content}
         </Typography>

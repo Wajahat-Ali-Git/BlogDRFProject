@@ -9,55 +9,31 @@ import "swiper/css/pagination"; // optional
 import { categories } from "../constants/constant";
 import slideImage1 from "../assets/slider1.jpg";
 import Header from "../components/Header";
+import { useEffect, useState } from "react";
+//import axios from "axios";
+import { api } from "../services/TokenAuth";
 //import extra from "../assets/extra.jpg";
 
 export default function LandingPage() {
+  const [popularPosts, setPopularPosts] = useState<any[]>([]);
+  useEffect(() => {
+    handlefetchPopularPosts();
+  }, []);
+
+  const handlefetchPopularPosts = async () => {
+    try {
+      const res = await api.get("blog/posts/popular/");
+      console.log("Popular posts fetched successfully", res.data);
+      setPopularPosts(res.data);
+      return popularPosts;
+    } catch (error) {
+      console.error("Error while fetching popular posts", error);
+      return [];
+    }
+  };
   const navigate = useNavigate();
+
   const data = localStorage.getItem("token");
-
-  const popularPosts = [
-    {
-      topic: "Sports",
-      username: "alizain@gmail.com",
-      heading:
-        "Understanding the passion behind the players motivation to play basketball",
-      content:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem,optio pariatur voluptate obcaecati adipisci recusandae natus dolore possimus a et earum sunt consectetur laboriosamrepellendus saepe doloribus eius ut. Repellendus. Lorem ipsumdolor sit amet consectetur adipisicing elit. Quae deleniti fugitaccusamus doloremque nemo, dolorem quam necessitatibus debitisdicta veniam quibusdam minima ipsa consequuntur cumque beataeexercitationem eius ut. Hic? Lorem ipsum dolor, sit ametconsectetur adipisicing elit. Delectus cumque ab eos cumconsectetur sunt quos culpa eius labore architecto eumvoluptatem aliquam quam, quae modi, eligendi nihil aspernaturvero! Lorem ipsum dolor sit amet consectetur adipisicing elit.Quia itaque voluptatum ducimus aliquid fugiat aspernaturvoluptatibus magni at qui repellendus beatae, modi rerumquisquam nulla nobis nemo error placeat blanditiis!Lorem ipsumdolor sit amet consectetur adipisicing elit. Autem, optiopariatur voluptate obcaecati adipisci recusandae natus dolorepossimus a et earum sunt consectetur laboriosam repellendussaepe",
-    },
-    {
-      topic: "Technology",
-      username: "wajahat@gmail.com",
-      heading:
-        "Understanding the passion behind the players motivation to play basketball",
-      content:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem,optio pariatur voluptate obcaecati adipisci recusandae natus dolore possimus a et earum sunt consectetur laboriosamrepellendus saepe doloribus eius ut. Repellendus. Lorem ipsumdolor sit amet consectetur adipisicing elit. Quae deleniti fugitaccusamus doloremque nemo, dolorem quam necessitatibus debitisdicta veniam quibusdam minima ipsa consequuntur cumque beataeexercitationem eius ut. Hic? Lorem ipsum dolor, sit ametconsectetur adipisicing elit. Delectus cumque ab eos cumconsectetur sunt quos culpa eius labore architecto eumvoluptatem aliquam quam, quae modi, eligendi nihil aspernaturvero! Lorem ipsum dolor sit amet consectetur adipisicing elit.Quia itaque voluptatum ducimus aliquid fugiat aspernaturvoluptatibus magni at qui repellendus beatae, modi rerumquisquam nulla nobis nemo error placeat blanditiis!Lorem ipsumdolor sit amet consectetur adipisicing elit. Autem, optiopariatur voluptate obcaecati adipisci recusandae natus dolorepossimus a et earum sunt consectetur laboriosam repellendussaepe",
-    },
-    {
-      topic: "Health",
-      username: "fatima@gmail.com",
-      heading:
-        "Understanding the passion behind the players motivation to play basketball",
-      content:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem,optio pariatur voluptate obcaecati adipisci recusandae natus dolore possimus a et earum sunt consectetur laboriosamrepellendus saepe doloribus eius ut. Repellendus. Lorem ipsumdolor sit amet consectetur adipisicing elit. Quae deleniti fugitaccusamus doloremque nemo, dolorem quam necessitatibus debitisdicta veniam quibusdam minima ipsa consequuntur cumque beataeexercitationem eius ut. Hic? Lorem ipsum dolor, sit ametconsectetur adipisicing elit. Delectus cumque ab eos cumconsectetur sunt quos culpa eius labore architecto eumvoluptatem aliquam quam, quae modi, eligendi nihil aspernaturvero! Lorem ipsum dolor sit amet consectetur adipisicing elit.Quia itaque voluptatum ducimus aliquid fugiat aspernaturvoluptatibus magni at qui repellendus beatae, modi rerumquisquam nulla nobis nemo error placeat blanditiis!Lorem ipsumdolor sit amet consectetur adipisicing elit. Autem, optiopariatur voluptate obcaecati adipisci recusandae natus dolorepossimus a et earum sunt consectetur laboriosam repellendussaepe",
-    },
-    {
-      topic: "Education",
-      username: "ahmed@gmail.com",
-      heading:
-        "Understanding the passion behind the players motivation to play basketball",
-      content:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem,optio pariatur voluptate obcaecati adipisci recusandae natus dolore possimus a et earum sunt consectetur laboriosamrepellendus saepe doloribus eius ut. Repellendus. Lorem ipsumdolor sit amet consectetur adipisicing elit. Quae deleniti fugitaccusamus doloremque nemo, dolorem quam necessitatibus debitisdicta veniam quibusdam minima ipsa consequuntur cumque beataeexercitationem eius ut. Hic? Lorem ipsum dolor, sit ametconsectetur adipisicing elit. Delectus cumque ab eos cumconsectetur sunt quos culpa eius labore architecto eumvoluptatem aliquam quam, quae modi, eligendi nihil aspernaturvero! Lorem ipsum dolor sit amet consectetur adipisicing elit.Quia itaque voluptatum ducimus aliquid fugiat aspernaturvoluptatibus magni at qui repellendus beatae, modi rerumquisquam nulla nobis nemo error placeat blanditiis!Lorem ipsumdolor sit amet consectetur adipisicing elit. Autem, optiopariatur voluptate obcaecati adipisci recusandae natus dolorepossimus a et earum sunt consectetur laboriosam repellendussaepe",
-    },
-    {
-      topic: "Travel",
-      username: "sara@gmail.com",
-      heading:
-        "Understanding the passion behind the players motivation to play basketball",
-      content:
-        "Traveling opens new perspectives, introduces different cultures, and creates unforgettable memories.",
-    },
-  ];
-
   const username = data ? JSON.parse(data as string).username : "Guest";
   if (data === null || data === undefined) {
     return (
@@ -69,6 +45,7 @@ export default function LandingPage() {
       </div>
     );
   }
+
   return (
     <div className="relative bg-black min-h-screen">
       <Header />
@@ -168,21 +145,25 @@ export default function LandingPage() {
           >
             {popularPosts.map((post, index) => (
               <SwiperSlide key={index} className="flex flex-col gap-3">
-                <span className="border border-gray-500 rounded-md text-gray-400 opacity-70 font-medium text-[16px] px-2 py-1 ml-2.5 inline-block w-fit">
-                  {post.topic}
+                <span className="border border-gray-500 rounded-md text-gray-400 opacity-70 font-medium text-[16px] px-2 py-1 mb-1.5 ml-2.5 inline-block w-fit">
+                  {post.category_name}
                 </span>
                 <h1 className="font-semibold text-lg px-1.5">{post.heading}</h1>
-                <p className="opacity-80 font-medium text-[16px] px-1.5">
-                  {post.username}
-                </p>
                 <p className="opacity-80 font-medium text-[16px] px-1.5 leading-relaxed">
                   {post.content}
                 </p>
+                <div className="flex flex-row  justify-end text-center mt-1.5 ">
+                  by:
+                  <span className="flex justify-center text-center text-gray-300 text-sm px-1.5 ">
+                    {post.author_name}
+                  </span>
+                </div>
+
                 <h1
-                  onClick={() => navigate("/posts?category=others")}
+                  onClick={() => navigate("/posts")}
                   className="flex bg-gray-600/50 text-white rounded-md justify-center py-1 mt-4 cursor-pointer hover:bg-gray-600 transition-colors"
                 >
-                  Others
+                  Explore More
                 </h1>
               </SwiperSlide>
             ))}

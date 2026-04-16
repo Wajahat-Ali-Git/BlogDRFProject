@@ -16,6 +16,7 @@ import {
   Favorite as FavoriteIcon,
   Share as ShareIcon,
 } from "@mui/icons-material";
+import { FaEye } from "react-icons/fa";
 
 import { categories } from "../constants/constant";
 import { useNavigate } from "react-router-dom";
@@ -68,6 +69,11 @@ const Posts = () => {
         >
           {title}
         </Typography>
+        {(data === null || data.length === 0) && (
+          <div className="text-red-500/80">
+            No content available for this category
+          </div>
+        )}
 
         <Grid container spacing={3}>
           {data.map((post: any) => (
@@ -129,6 +135,12 @@ const Posts = () => {
                       <FavoriteIcon />
                       <sub className="text-red/70 text-sm">
                         {post?.likes_count || 0}
+                      </sub>
+                    </IconButton>
+                    <IconButton>
+                      <FaEye className="text-[#358395]" />
+                      <sub className="text-blue/70 text-sm">
+                        {post?.views || 0}
                       </sub>
                     </IconButton>
                     <IconButton

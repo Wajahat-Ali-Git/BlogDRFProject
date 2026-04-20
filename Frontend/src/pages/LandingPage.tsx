@@ -35,16 +35,6 @@ export default function LandingPage() {
 
   const data = localStorage.getItem("token");
   const username = data ? JSON.parse(data as string).username : "Guest";
-  if (data === null || data === undefined) {
-    return (
-      <div>
-        <h1>Welcome to the Blog App {username}</h1>
-        <pre>
-          Please <b>Login</b> to continue.
-        </pre>
-      </div>
-    );
-  }
 
   return (
     <div className="relative bg-black min-h-screen">

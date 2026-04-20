@@ -5,17 +5,10 @@ import { Share as ShareIcon } from "@mui/icons-material";
 import Header from "../components/Header";
 import { useLocation } from "react-router-dom";
 import { api } from "../services/TokenAuth";
+import { FaEye } from "react-icons/fa";
+import type { PostType } from "../types/PostTypes";
 
 const PostDetails = () => {
-  type PostType = {
-    id: number;
-    title: string;
-    content: string;
-    author_name: string;
-    created_at: string;
-    image: string;
-    likes_count: number;
-  };
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const postId = params.get("id");
@@ -54,7 +47,7 @@ const PostDetails = () => {
         <img
           src={post?.image}
           alt="1"
-          className="w-full h-full object-fill rounded-xl opacity-80 object-contain border border-cyan-400 rounded-xl w-[90%] h-[220px] sm:h-[200px] md:h-[400px] lg:h-[500px] mx-auto"
+          className="w-full h-full object-fill rounded-xl opacity-80 object-fit border border-cyan-400 rounded-xl w-[90%] h-[220px] sm:h-[200px] md:h-[400px] lg:h-[500px] mx-auto"
         />
         <Typography
           variant="h4"
@@ -84,10 +77,16 @@ const PostDetails = () => {
             className=""
             onClick={() => handleLikeClick(postId ? parseInt(postId) : 0)}
           >
-            <FavoriteIcon />
+            <FavoriteIcon
+              className={`${post?.is_liked === true ? `text-red/80` : `text-white/60`}`}
+            />
             <sub className="text-white/70 text-sm">
               {post?.likes_count || 0}
             </sub>
+          </IconButton>
+          <IconButton>
+            <FaEye className={`text-[#358395]/80`} />
+            <sub className="text-[#358395]/90 text-sm">{post?.views || 0}</sub>
           </IconButton>
           <IconButton aria-label="share" sx={{ color: "blue" }} className="">
             <ShareIcon />

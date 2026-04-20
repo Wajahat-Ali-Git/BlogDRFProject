@@ -6,11 +6,15 @@
   --color-bg-dark: #101011;
 }
 
+body {
+  background-color: #000000;
+}
+
 @layer base {
   body {
     @apply bg-white m-0 p-0 min-h-screen transition-colors duration-300;
   }
-  
+
   a {
     @apply no-underline text-white;
   }
@@ -19,7 +23,12 @@
 @layer utilities {
   .border-gradient-b {
     border-bottom: 3px solid;
-    border-image: linear-gradient(to right, var(--color-primary), var(--color-secondary)) 1;
+    border-image: linear-gradient(
+        to right,
+        var(--color-primary),
+        var(--color-secondary)
+      )
+      1;
   }
 }
 

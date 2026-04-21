@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -35,7 +35,7 @@ class CategoryListCreateAPI(generics.ListCreateAPIView):
 class PostListCreateAPI(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    parser_classes = (MultiPartParser, FormParser)
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
 
     def get_queryset(self):
         queryset = Post.objects.filter(is_published=True)

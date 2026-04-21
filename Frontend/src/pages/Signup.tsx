@@ -66,6 +66,7 @@ export const Signup = () => {
             <input
               className="w-full rounded-lg py-2 px-3 bg-white/20 border border-white/30 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"
               type="email"
+              style={{ color: "gray" }}
               placeholder="Enter your email"
               value={email}
               required
@@ -78,6 +79,7 @@ export const Signup = () => {
             </label>
             <input
               className="w-full rounded-lg py-2 px-3 bg-white/20 border border-white/30 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"
+              style={{ color: "gray" }}
               type="password"
               placeholder="Create a password"
               value={password}

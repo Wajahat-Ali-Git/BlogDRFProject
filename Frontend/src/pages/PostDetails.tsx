@@ -7,13 +7,16 @@ import { useLocation } from "react-router-dom";
 import { api } from "../services/TokenAuth";
 import { FaEye } from "react-icons/fa";
 import type { PostType } from "../types/PostTypes";
+import { format } from "date-fns";
 
 const PostDetails = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const postId = params.get("id");
+  const language =
+    localStorage.getItem("language") || localStorage.setItem("language", "en");
   const [post, setPost] = useState<PostType | null>(null);
-  const url = postId ? `blog/posts/${postId}/` : "";
+  const url = postId ? `blog/posts/${postId}/?lang=${language}` : "";
   const handlePostDetails = async () => {
     try {
       const res = await api.get(url);
@@ -39,16 +42,28 @@ const PostDetails = () => {
     }
   };
 
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "";
+
+    return format(date, "MMMM d, yyyy");
+  };
+
   return (
     <div className="bg-black h-min-[100vh] h-max-auto gap-5 flex flex-col pb-10">
       <Header />
 
       <div className="mx-5 md:mx-20 lg:mx-40 flex flex-col gap-3">
-        <img
-          src={post?.image}
-          alt="1"
-          className="w-full h-full object-fill rounded-xl opacity-80 object-fit border border-cyan-400 rounded-xl w-[90%] h-[220px] sm:h-[200px] md:h-[400px] lg:h-[500px] mx-auto"
-        />
+        <div className="w-full aspect-video rounded-2xl overflow-hidden border border-cyan-400/40 shadow-lg shadow-cyan-900/20">
+          <img
+            src={post?.image}
+            alt={post?.title || "Post image"}
+            className="w-full h-full object-cover opacity-90"
+          />
+        </div>
+
         <Typography
           variant="h4"
           gutterBottom
@@ -65,7 +80,7 @@ const PostDetails = () => {
           {post?.title}
         </Typography>
         <Typography sx={{ color: "gray" }} variant="body2">
-          <b>{post?.created_at}</b>{" "}
+          <b>{post?.created_at ? formatDate(post.created_at) : ""}</b>
         </Typography>
         <Typography sx={{ color: "white" }} variant="body2">
           by: <span className="text-gray-300">{post?.author_name}</span>{" "}

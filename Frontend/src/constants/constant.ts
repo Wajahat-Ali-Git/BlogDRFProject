@@ -6,35 +6,41 @@ import others from "../assets/others.png";
 
 export const categories = [
   {
-    title: "Sports",
+    // use translation key `category.<slug>` in components
+    titleKey: "category.sports",
+    label: "Sports",
     image: SportsImg,
     bg: "bg-green-600/50",
     route: "/posts?category=sports",
     slug: "sports",
   },
   {
-    title: "Esports",
+    titleKey: "category.e-sports",
+    label: "Esports",
     image: EsportsImg,
     bg: "bg-black/50",
     route: "/posts?category=e-sports",
     slug: "e-sports",
   },
   {
-    title: "Cricket",
+    titleKey: "category.cricket",
+    label: "Cricket",
     image: cricket,
     bg: "bg-red-600/50",
     route: "/posts?category=cricket",
     slug: "cricket",
   },
   {
-    title: "Entertainment",
+    titleKey: "category.entertainment",
+    label: "Entertainment",
     image: entertainment,
     bg: "bg-orange-600/50",
     route: "/posts?category=entertainment",
     slug: "entertainment",
   },
   {
-    title: "Others",
+    titleKey: "category.others",
+    label: "Others",
     image: others,
     bg: "bg-gray-600/50",
     route: "/posts?category=others",

@@ -10,8 +10,9 @@ import { categories } from "../constants/constant";
 import slideImage1 from "../assets/slider1.jpg";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
-//import axios from "axios";
+import { useTranslation } from "react-i18next";
 import { api } from "../services/TokenAuth";
+
 //import extra from "../assets/extra.jpg";
 
 import {
@@ -21,7 +22,7 @@ import {
   Container,
   IconButton,
 } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+// import Grid from "@mui/material/Unstable_Grid2";
 import {
   Favorite as FavoriteIcon,
   Share as ShareIcon,
@@ -34,17 +35,21 @@ export default function LandingPage() {
   const [blogCategory, setBlogCategory] = useState(categories[0]?.slug || "");
   const [blogContent, setBlogContent] = useState("");
   const [blogImage, setBlogImage] = useState<File | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     handlefetchPopularPosts();
   }, []);
 
+  const language =
+    localStorage.getItem("language") || localStorage.setItem("language", "en");
+
   const handlefetchPopularPosts = async () => {
     try {
-      const res = await api.get("blog/posts/popular/");
+      const res = await api.get(`blog/posts/popular/?lang=${language}`);
       console.log("Popular posts fetched successfully", res.data);
       setPopularPosts(res.data);
-      return popularPosts;
+      return res.data;
     } catch (error) {
       console.error("Error while fetching popular posts", error);
       return [];
@@ -112,11 +117,9 @@ export default function LandingPage() {
         <div className="bg-black text-white">
           <div className="px-6 lg:px-12 py-12">
             <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white to-gray-500 bg-clip-text text-transparent">
-              Welcome to our Blog App {username}
+              {t("welcomeWithUser", { user: username })}
             </h1>
-            <p className="mt-2 text-gray-400 text-lg">
-              What brings you to our blog app today?
-            </p>
+            <p className="mt-2 text-gray-400 text-lg">{t("whatBrings")}</p>
           </div>
 
           <div className="px-4 sm:px-6 lg:px-12 py-12">
@@ -129,10 +132,10 @@ export default function LandingPage() {
                 >
                   <div className="flex flex-col gap-2 mb-8">
                     <h2 className="text-2xl sm:text-3xl font-bold text-white">
-                      Create a Blog
+                      {t("createBlog")}
                     </h2>
                     <p className="text-sm text-gray-400">
-                      Share your story with a modern interface.
+                      {t("createBlogDesc")}
                     </p>
                   </div>
 
@@ -142,14 +145,14 @@ export default function LandingPage() {
                         htmlFor="blog-title"
                         className="text-sm font-semibold text-gray-300"
                       >
-                        Title
+                        {t("title")}
                       </label>
                       <input
                         id="blog-title"
                         type="text"
                         value={blogTitle}
                         onChange={(e) => setBlogTitle(e.target.value)}
-                        placeholder="Enter blog title"
+                        placeholder={t("enterblogtitle")}
                         className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-white focus:border-cyan-400/50 outline-none transition-all"
                       />
                     </div>
@@ -159,7 +162,7 @@ export default function LandingPage() {
                         htmlFor="blog-category"
                         className="text-sm font-semibold text-gray-300"
                       >
-                        Category
+                        {t("category")}
                       </label>
                       <select
                         id="blog-category"
@@ -173,7 +176,7 @@ export default function LandingPage() {
                             value={cat.slug}
                             className="bg-gray-900"
                           >
-                            {cat.title}
+                            {t(cat.titleKey || `category.${cat.slug}`)}
                           </option>
                         ))}
                       </select>
@@ -184,7 +187,7 @@ export default function LandingPage() {
                         htmlFor="blog-image"
                         className="text-sm font-semibold text-gray-300"
                       >
-                        Image
+                        {t("image")}
                       </label>
                       <input
                         id="blog-image"
@@ -204,13 +207,13 @@ export default function LandingPage() {
                         htmlFor="blog-content"
                         className="text-sm font-semibold text-gray-300"
                       >
-                        Content
+                        {t("content")}
                       </label>
                       <textarea
                         id="blog-content"
                         value={blogContent}
                         onChange={(e) => setBlogContent(e.target.value)}
-                        placeholder="Write your content here..."
+                        placeholder={t("writeYourContentHere")}
                         rows={6}
                         className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-white resize-y"
                       />
@@ -222,7 +225,7 @@ export default function LandingPage() {
                       type="submit"
                       className="w-full md:w-auto rounded-full bg-cyan-500 px-8 py-3 font-bold text-white hover:bg-cyan-600 transition-all active:scale-95"
                     >
-                      Post Blog
+                      {t("postBlog")}
                     </button>
                   </div>
                 </form>
@@ -242,7 +245,7 @@ export default function LandingPage() {
                   >
                     <CardContent sx={{ p: 4 }}>
                       <h2 className="text-xl font-bold mb-4 text-cyan-400">
-                        Live Preview
+                        {t("livePreview")}
                       </h2>
                       {blogImage && (
                         <img
@@ -255,23 +258,23 @@ export default function LandingPage() {
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${categories.find((c) => c.slug === blogCategory)?.bg || "bg-gray-600"}`}
                         >
-                          {
+                          {t(
                             categories.find((c) => c.slug === blogCategory)
-                              ?.title
-                          }
+                              ?.titleKey || `category.${blogCategory}`,
+                          )}
                         </span>
                       </div>
                       <Typography
                         variant="h4"
                         sx={{ fontWeight: "bold", mb: 2 }}
                       >
-                        {blogTitle || "Your Title"}
+                        {blogTitle || t("yourTitle")}
                       </Typography>
                       <Typography
                         variant="body1"
                         sx={{ opacity: 0.7, mb: 4, whiteSpace: "pre-wrap" }}
                       >
-                        {blogContent || "Your content..."}
+                        {blogContent || t("yourContent")}
                       </Typography>
                       <div className="flex items-center justify-between pt-6 border-t border-white/10">
                         <div className="flex items-center gap-3">
@@ -322,14 +325,14 @@ export default function LandingPage() {
                       <div className="relative rounded-2xl overflow-hidden h-40">
                         <img
                           src={item.image}
-                          alt={item.title}
+                          alt={t(item.titleKey || `category.${item.slug}`)}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                           <span
                             className={`px-4 py-1 rounded-lg text-white font-bold ${item.bg}`}
                           >
-                            {item.title}
+                            {t(item.titleKey || `category.${item.slug}`)}
                           </span>
                         </div>
                       </div>
@@ -343,7 +346,7 @@ export default function LandingPage() {
 
         <div className=" लोकप्रिय post flex flex-col bg-black text-white items-center py-12 px-6">
           <h1 className="text-2xl font-bold mb-8 underline decoration-cyan-500">
-            Popular Posts
+            {t("popularPosts")}
           </h1>
           <Swiper
             className="w-full max-w-4xl"
@@ -360,21 +363,19 @@ export default function LandingPage() {
                 <span className="text-cyan-400 text-sm font-bold uppercase">
                   {post.category_name}
                 </span>
-                <h2 className="text-2xl font-bold mt-2">
-                  {post.heading || post.title}
-                </h2>
+                <h2 className="text-2xl font-bold mt-2">{post.title}</h2>
                 <p className="text-gray-400 mt-4 line-clamp-3">
                   {post.content}
                 </p>
                 <div className="mt-6 flex justify-between items-center">
                   <span className="text-sm text-gray-500">
-                    by @{post.author_name}
+                    {t("by")} @{post.author_name}
                   </span>
                   <button
                     onClick={() => navigate("/posts")}
                     className="text-cyan-400 font-bold hover:underline"
                   >
-                    Read More
+                    {t("readMore")}
                   </button>
                 </div>
               </SwiperSlide>

@@ -16,6 +16,9 @@ class Post(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
 
+    # cache translations (JSON)
+    translations = models.JSONField(default=dict, blank=True)
+
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(
         Category,

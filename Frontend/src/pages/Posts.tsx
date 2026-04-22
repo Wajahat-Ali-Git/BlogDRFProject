@@ -3,6 +3,7 @@ import { api } from "../services/TokenAuth";
 import Header from "../components/Header";
 import { useLocation } from "react-router-dom";
 
+
 // MUI imports
 import {
   Card,
@@ -19,18 +20,24 @@ import {
 import { FaEye } from "react-icons/fa";
 
 import { categories } from "../constants/constant";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 const Posts = () => {
   const [data, setData] = React.useState<any[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
+  const language =
+    localStorage.getItem("language") || localStorage.setItem("language", "en");
   const params = new URLSearchParams(location.search);
   const selectedCategorySlug = params.get("category");
 
+
   const handlegetPosts = async (category?: string) => {
     try {
-      const url = category ? `blog/posts/?category=${category}` : "blog/posts/";
+      const url = category
+        ? `blog/posts/?category=${category}&lang=${language}`
+        : `blog/posts/?lang=${language}`;
       const res = await api.get(url);
       console.log("Posts fetched successfully", res.data);
       setData(res.data);
@@ -39,6 +46,7 @@ const Posts = () => {
     }
   };
 
+
   useEffect(() => {
     handlegetPosts(selectedCategorySlug || undefined);
   }, [selectedCategorySlug]);
@@ -46,9 +54,10 @@ const Posts = () => {
   const currentCategory = categories.find(
     (cat) => cat.slug === selectedCategorySlug,
   );
+  const { t } = useTranslation();
   const title = currentCategory
-    ? `${currentCategory.title} Posts`
-    : "All Blog Posts";
+    ? `${t(currentCategory.titleKey || `category.${currentCategory.slug}`)} Posts`
+    : t("popularPosts");
 
   return (
     <div className="bg-black">
@@ -93,6 +102,14 @@ const Posts = () => {
                   className="border border-cyan-400"
                   onClick={() => navigate(`/posts/post-detail/?id=${post.id}`)}
                 >
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${categories.find((c) => c.slug === post.category)?.bg || "bg-gray-600"}`}
+                  >
+                    {t(
+                      categories.find((c) => c.slug === post.category)
+                        ?.titleKey || `category.${post.category}`
+                    )}
+                  </span>
                   {/* IMAGE */}
                   {post.image && (
                     <img
@@ -100,6 +117,7 @@ const Posts = () => {
                       alt={post.title}
                       style={{
                         width: "100%",
+                        marginTop: "10px",
                         height: "200px",
                         objectFit: "cover",
                         borderRadius: "8px",
@@ -120,12 +138,8 @@ const Posts = () => {
                     {post.content?.slice(0, 300)}...
                   </Typography>
 
-                  <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-                    Category: <b>{post.category_name}</b>
-                  </Typography>
-
                   <Typography variant="caption">
-                    Author: <b>{post.author_name}</b>
+                    Author: <b>@{post.author_name}</b>
                   </Typography>
                   <div className="flex justify-end gap-1 mt-2">
                     <IconButton

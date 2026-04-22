@@ -9,7 +9,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(
+        slug_field="slug", queryset=Category.objects.all()
+    )
     category_name = serializers.CharField(source="category.name", read_only=True)
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
     author_name = serializers.CharField(source="author.username", read_only=True)
     likes_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()

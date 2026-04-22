@@ -4,6 +4,7 @@
   --color-primary: #358395;
   --color-secondary: #ffffff;
   --color-bg-dark: #101011;
+  --color-gray: #1e1e1e;
 }
 
 body {
@@ -35,7 +36,7 @@ body {
 /* Hero Swiper Customizations - specific to the top slider */
 .hero-swiper {
   width: 98%;
-  height: 400px;
+  height: 600px;
   position: relative;
   right: 0;
 }
@@ -82,4 +83,10 @@ body {
 
 .custom-swiper {
   --swiper-navigation-size: 10px;
+}
+
+@media only screen and (max-width: 720px) {
+  .hero-swiper {
+    height: 400px;
+  }
 }

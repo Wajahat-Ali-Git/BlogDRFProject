@@ -78,17 +78,15 @@ const PostDetails = () => {
             onClick={() => handleLikeClick(postId ? parseInt(postId) : 0)}
           >
             <FavoriteIcon
-              className={`${post?.is_liked === true ? `text-red/80` : `text-white/60`}`}
+              className={`${post?.is_liked === true ? `text-red/80` : `text-white`}`}
             />
-            <sub className="text-white/70 text-sm">
-              {post?.likes_count || 0}
-            </sub>
+            <sub className="text-white text-sm">{post?.likes_count || 0}</sub>
           </IconButton>
           <IconButton>
-            <FaEye className={`text-[#358395]/80`} />
-            <sub className="text-[#358395]/90 text-sm">{post?.views || 0}</sub>
+            <FaEye className={`text-white`} />
+            <sub className="text-white text-sm">{post?.views || 0}</sub>
           </IconButton>
-          <IconButton aria-label="share" sx={{ color: "blue" }} className="">
+          <IconButton aria-label="share" sx={{ color: "white" }} className="">
             <ShareIcon />
           </IconButton>
         </div>

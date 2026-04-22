@@ -13,7 +13,7 @@ const Header = () => {
     navigate("/login");
   };
   return (
-    <section className="header relative flex flex-row gap-5 items-center justify-between bg-black w-full border-gradient-b">
+    <section className="header fixed z-2 flex flex-row gap-5 items-center justify-between bg-black w-full border-gradient-b">
       <div className="app-details flex items-center">
         {" "}
         <img

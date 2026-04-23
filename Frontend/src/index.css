@@ -1,3 +1,155 @@
-body{
-  background-color: wheat;
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #358395;
+  --color-secondary: #ffffff;
+  --color-bg-dark: #101011;
+  --color-gray: #1e1e1e;
+  --color-accent: #22d3ee;
 }
+
+body {
+  background-color: #000000;
+  color: white;
+}
+
+@layer base {
+  body {
+    @apply bg-black m-0 p-0 min-h-screen transition-colors duration-300;
+  }
+
+  a {
+    @apply no-underline text-white;
+  }
+}
+
+@layer utilities {
+  .border-gradient-b {
+    border-bottom: 3px solid;
+    border-image: linear-gradient(
+        to right,
+        var(--color-primary),
+        var(--color-secondary)
+      )
+      1;
+  }
+
+  .glass {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-2xl;
+  }
+
+  .glass-hover {
+    @apply hover:bg-white/10 hover:border-white/20 transition-all duration-300;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-white via-cyan-200 to-cyan-500 bg-clip-text text-transparent;
+  }
+}
+
+/* Hero Swiper Customizations - specific to the top slider */
+.hero-swiper {
+  width: 98%;
+  height: 600px;
+  position: relative;
+  right: 0;
+}
+
+.hero-swiper .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px;
+  opacity: 0.8;
+}
+
+.custom-swiper .swiper-button-prev,
+.custom-swiper .swiper-button-next {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff !important;
+  font-weight: 600;
+  height: 20px;
+  width: 30px;
+}
+
+.custom-swiper .swiper-button-next::after,
+.custom-swiper .swiper-button-prev::after {
+  font-size: 28px !important;
+  font-weight: bold;
+  color: #ffffff !important;
+}
+
+.custom-swiper .swiper-pagination-bullet {
+  width: 30px;
+  height: 6px;
+  border-radius: 3px;
+  background: #26272d;
+  opacity: 1;
+  transition: all 0.3s ease;
+  margin: 0 4px !important;
+}
+
+.custom-swiper .swiper-pagination-bullet-active {
+  background: #06b6d4;
+  width: 45px;
+}
+
+.custom-swiper {
+  --swiper-navigation-size: 10px;
+}
+
+@media only screen and (max-width: 720px) {
+  .hero-swiper {
+    height: 400px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-cyan {
+  0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(6, 182, 212, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-left {
+  animation: slideLeft 0.5s ease-out forwards;
+}
+
+.animate-pulse-cyan {
+  animation: pulse-cyan 2s infinite;
+}
+

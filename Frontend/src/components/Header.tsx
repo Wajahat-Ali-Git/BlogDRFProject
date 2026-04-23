@@ -5,13 +5,14 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { MdLanguage, MdMenu, MdClose } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import { ArrowForward } from "@mui/icons-material";
 
 const LANGUAGES = [
   { code: "en", label: "English", flag: "🇬🇧" },
   { code: "ur", label: "اردو", flag: "🇵🇰" },
   { code: "ar", label: "العربية", flag: "🇸🇦" },
   { code: "hi", label: "हिन्दी", flag: "🇮🇳" },
-  { code: "zh", label: "中文", flag: "🇨🇳" }, // for Chinese
+  { code: "zh", label: "中文", flag: "🇨🇳" },
 ];
 
 const CATEGORIES = [
@@ -36,7 +37,6 @@ const Header = () => {
   const catRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
 
-  // Close desktop dropdowns when clicking outside
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (catRef.current && !catRef.current.contains(e.target as Node))
@@ -48,7 +48,6 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isMobileOpen ? "hidden" : "";
     return () => {
@@ -76,47 +75,52 @@ const Header = () => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between bg-black/95 backdrop-blur-md border-b border-white/10 h-16 md:h-20 px-4 md:px-8">
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between glass h-16 md:h-24 px-6 md:px-12 transition-all duration-300">
         {/* ── Logo ── */}
         <div
-          className="flex items-center gap-2 cursor-pointer group flex-shrink-0"
+          className="flex items-center gap-3 cursor-pointer group flex-shrink-0"
           onClick={() => navigate("/")}
         >
-          <img
-            src="https://img.icons8.com/?size=100&id=79041&format=png&color=FFFFFF"
-            alt="logo"
-            className="w-9 h-9 md:w-10 md:h-10 group-hover:scale-110 transition-transform duration-200"
-          />
-          <span className="text-white font-extrabold text-base md:text-xl tracking-wide">
-            BLOG <span className="text-cyan-400">App</span>
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-110 transition-all">
+            <img
+              src="https://img.icons8.com/?size=100&id=79041&format=png&color=FFFFFF"
+              alt="logo"
+              className="w-7 h-7"
+            />
+          </div>
+          <span className="text-white font-black text-xl tracking-tighter uppercase">
+            BLOG <span className="text-cyan-500">App</span>
           </span>
         </div>
 
-        {/* ── Desktop Nav (md+) ── */}
-        <nav className="hidden md:flex items-center gap-6 text-white text-sm font-medium">
+        {/* ── Desktop Nav ── */}
+        <nav className="hidden md:flex items-center gap-8 text-white text-xs font-black uppercase tracking-widest">
           <button
             onClick={() => navigate("/")}
-            className="hover:text-cyan-400 transition-colors"
+            className="hover:text-cyan-500 transition-colors flex flex-col items-center group"
           >
             {t("home")}
+            <span className="w-0 h-0.5 bg-cyan-500 group-hover:w-full transition-all" />
           </button>
 
-          {/* Desktop Categories */}
           <div ref={catRef} className="relative">
             <button
               onClick={() => {
                 setIsCatOpen((v) => !v);
                 setIsUserOpen(false);
               }}
-              className="flex items-center gap-1 hover:text-cyan-400 transition-colors"
+              className="flex items-center gap-1 hover:text-cyan-500 transition-colors group flex-col"
             >
-              {t("categories")}
-              <IoMdArrowDropdown
-                className={`transition-transform duration-200 ${isCatOpen ? "rotate-180" : ""}`}
-              />
+              <div className="flex items-center gap-1">
+                {t("categories")}
+                <IoMdArrowDropdown
+                  className={`transition-transform duration-300 ${isCatOpen ? "rotate-180" : ""}`}
+                />
+              </div>
+              <span className={`w-0 h-0.5 bg-cyan-500 transition-all ${isCatOpen ? 'w-full' : 'group-hover:w-full'}`} />
             </button>
             {isCatOpen && (
-              <ul className="absolute top-[calc(100%+10px)] left-0 min-w-[180px] bg-gray-900/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50">
+              <ul className="absolute top-[calc(100%+20px)] left-0 min-w-[220px] bg-black/90 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden z-50 animate-slide-down py-2">
                 {CATEGORIES.map((cat) => (
                   <li
                     key={cat.slug}
@@ -124,77 +128,75 @@ const Header = () => {
                       navigate(`/posts?category=${cat.slug}`);
                       setIsCatOpen(false);
                     }}
-                    className="px-4 py-3 text-gray-300 hover:text-white hover:bg-cyan-500/10 cursor-pointer transition-colors border-b border-white/5 last:border-0 text-sm"
+                    className="px-6 py-4 text-gray-400 hover:text-white hover:bg-cyan-500/10 cursor-pointer transition-all text-[10px] font-black tracking-widest flex items-center justify-between group"
                   >
                     {t(`category.${cat.slug}`)}
+                    <ArrowForward fontSize="inherit" className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
                   </li>
                 ))}
               </ul>
             )}
           </div>
 
-          <button
-            onClick={(e) => e.preventDefault()}
-            className="hover:text-cyan-400 transition-colors"
-          >
+          <button className="hover:text-cyan-500 transition-colors flex flex-col items-center group">
             {t("about")}
+            <span className="w-0 h-0.5 bg-cyan-500 group-hover:w-full transition-all" />
           </button>
-          <button
-            onClick={(e) => e.preventDefault()}
-            className="hover:text-cyan-400 transition-colors"
-          >
-            {t("help")}
-          </button>
-
-          {/* Desktop User Menu */}
-          <div ref={userRef} className="relative">
+          
+          {/* User Menu */}
+          <div ref={userRef} className="relative ml-4">
             <button
               id="user-menu-trigger"
               onClick={() => {
                 setIsUserOpen((v) => !v);
                 setIsCatOpen(false);
               }}
-              className="flex items-center gap-2 bg-white/5 hover:bg-cyan-500/10 border border-white/10 hover:border-cyan-400/40 px-3 py-1.5 rounded-full transition-all duration-200"
+              className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 px-5 py-2.5 rounded-2xl transition-all shadow-lg"
             >
-              <FaUserCircle className="text-cyan-400 text-base" />
-              <span className="text-cyan-300 font-bold max-w-[100px] truncate">
+              <FaUserCircle className="text-cyan-500 text-lg" />
+              <span className="text-white font-black text-[10px] tracking-widest uppercase truncate max-w-[100px]">
                 {username}
               </span>
               <IoMdArrowDropdown
-                className={`text-gray-400 transition-transform duration-200 ${isUserOpen ? "rotate-180" : ""}`}
+                className={`text-gray-500 transition-transform duration-300 ${isUserOpen ? "rotate-180" : ""}`}
               />
             </button>
 
             {isUserOpen && (
-              <div className="absolute top-[calc(100%+10px)] right-0 min-w-[230px] bg-gray-900/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50">
-                <div className="px-4 py-3 border-b border-white/10 bg-white/5">
-                  <p className="text-xs text-gray-400">{t("signedInAs")}</p>
-                  <p className="text-white font-bold truncate">{username}</p>
+              <div className="absolute top-[calc(100%+20px)] right-0 min-w-[260px] bg-black/90 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden z-50 animate-slide-down">
+                <div className="px-6 py-6 border-b border-white/5 bg-white/5">
+                  <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-1">{t("signedInAs")}</p>
+                  <p className="text-white font-black text-sm truncate">{username}</p>
                 </div>
-                <div className="px-4 py-3 border-b border-white/10">
-                  <p className="text-xs text-gray-400 flex items-center gap-1 mb-2">
-                    <MdLanguage className="text-cyan-400" /> {t("language")}
+                
+                <div className="px-6 py-6 border-b border-white/5">
+                  <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest flex items-center gap-2 mb-4">
+                    <MdLanguage className="text-cyan-500" /> {t("language")}
                   </p>
-                  <div className="grid grid-cols-2 gap-1">
+                  <div className="grid grid-cols-1 gap-2">
                     {LANGUAGES.map((lang) => (
                       <button
                         key={lang.code}
                         onClick={() => handleLanguageChange(lang.code)}
-                        className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-xs transition-all duration-150 ${
+                        className={`flex items-center justify-between px-4 py-3 rounded-xl text-[10px] font-black tracking-widest transition-all ${
                           currentLang === lang.code
-                            ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400/30"
-                            : "text-gray-300 hover:bg-white/10 hover:text-white"
+                            ? "bg-cyan-500 text-white shadow-lg shadow-cyan-500/20"
+                            : "text-gray-400 hover:bg-white/5 hover:text-white"
                         }`}
                       >
-                        <span>{lang.flag}</span>
-                        <span>{lang.label}</span>
+                        <div className="flex items-center gap-3">
+                          <span>{lang.flag}</span>
+                          <span>{lang.label}</span>
+                        </div>
+                        {currentLang === lang.code && <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
                       </button>
                     ))}
                   </div>
                 </div>
+                
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors text-sm font-medium"
+                  className="w-full flex items-center gap-3 px-6 py-5 text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all text-[10px] font-black tracking-widest uppercase"
                 >
                   <CiLogout className="text-lg rotate-180" />
                   {t("signOut")}
@@ -204,91 +206,78 @@ const Header = () => {
           </div>
         </nav>
 
-        {/* ── Mobile: user pill + hamburger ── */}
-        <div className="flex md:hidden items-center gap-2">
-          {/* Mini user pill */}
-          <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-2.5 py-1 rounded-full">
-            <FaUserCircle className="text-cyan-400 text-sm" />
-            <span className="text-cyan-300 text-xs font-bold max-w-[60px] truncate">
+        {/* ── Mobile Nav ── */}
+        <div className="flex md:hidden items-center gap-3">
+          <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl">
+            <FaUserCircle className="text-cyan-500 text-sm" />
+            <span className="text-white text-[10px] font-black tracking-widest uppercase truncate max-w-[60px]">
               {username}
             </span>
           </div>
 
-          {/* Hamburger button */}
           <button
-            aria-label="Toggle menu"
             onClick={() => setIsMobileOpen((v) => !v)}
-            className="p-2 rounded-lg text-white hover:bg-white/10 transition-colors"
+            className="p-2.5 rounded-xl bg-white/5 text-white hover:bg-white/10 transition-all"
           >
-            {isMobileOpen ? (
-              <MdClose className="text-2xl" />
-            ) : (
-              <MdMenu className="text-2xl" />
-            )}
+            {isMobileOpen ? <MdClose className="text-xl" /> : <MdMenu className="text-xl" />}
           </button>
         </div>
       </header>
 
       {/* ── Mobile Drawer ── */}
-      {/* Backdrop */}
       {isMobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 bg-black/80 backdrop-blur-md md:hidden animate-fade-in"
           onClick={() => setIsMobileOpen(false)}
         />
       )}
 
-      {/* Slide-down panel */}
       <div
-        className={`fixed top-16 left-0 right-0 z-40 md:hidden bg-gray-950/98 backdrop-blur-md border-b border-white/10 shadow-2xl transition-all duration-300 ease-in-out overflow-y-auto max-h-[calc(100vh-4rem)] ${
+        className={`fixed top-20 left-4 right-4 z-40 md:hidden glass rounded-[2.5rem] shadow-2xl transition-all duration-500 ease-in-out overflow-y-auto max-h-[80vh] ${
           isMobileOpen
-            ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 -translate-y-4 pointer-events-none"
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-10 pointer-events-none"
         }`}
       >
-        <div className="px-5 py-4 flex flex-col gap-1">
-          {/* Signed in as */}
-          <div className="flex items-center gap-3 px-3 py-3 mb-2 bg-white/5 rounded-xl border border-white/10">
-            <FaUserCircle className="text-cyan-400 text-2xl flex-shrink-0" />
+        <div className="p-8 flex flex-col gap-2">
+          <div className="flex items-center gap-4 p-5 mb-4 bg-white/5 rounded-[2rem] border border-white/10">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center font-black text-white text-xl">
+               {username.charAt(0)}
+            </div>
             <div>
-              <p className="text-xs text-gray-400">{t("signedInAs")}</p>
-              <p className="text-white font-bold">{username}</p>
+              <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest">{t("signedInAs")}</p>
+              <p className="text-white font-black">{username}</p>
             </div>
           </div>
 
-          {/* Nav links */}
           {[
             { icon: "🏠", key: "home", action: () => goTo("/") },
             { icon: "ℹ️", key: "about", action: () => setIsMobileOpen(false) },
-            { icon: "❓", key: "help", action: () => setIsMobileOpen(false) },
           ].map((item) => (
             <button
               key={item.key}
               onClick={item.action}
-              className="text-left px-4 py-3 rounded-xl text-gray-200 hover:text-white hover:bg-white/10 transition-colors text-sm font-medium"
+              className="text-left px-6 py-4 rounded-2xl text-gray-300 hover:text-white hover:bg-white/5 transition-all text-[10px] font-black uppercase tracking-widest"
             >
-              {`${item.icon}  ${t(item.key)}`}
+              {item.icon} <span className="ml-3">{t(item.key)}</span>
             </button>
           ))}
 
-          {/* Mobile Categories accordion */}
-          <div>
+          <div className="mt-4">
             <button
               onClick={() => setIsMobileCatOpen((v) => !v)}
-              className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-200 hover:text-white hover:bg-white/10 transition-colors text-sm font-medium"
+              className="w-full flex items-center justify-between px-6 py-4 rounded-2xl text-gray-300 hover:text-white hover:bg-white/5 transition-all text-[10px] font-black uppercase tracking-widest"
             >
-              <span>{`📂 ${t("categories")}`}</span>
-              <IoMdArrowDropdown
-                className={`transition-transform duration-200 text-lg ${isMobileCatOpen ? "rotate-180" : ""}`}
-              />
+              <span className="flex items-center gap-3">📂 {t("categories")}</span>
+              <IoMdArrowDropdown className={`transition-transform duration-300 text-lg ${isMobileCatOpen ? "rotate-180" : ""}`} />
             </button>
             {isMobileCatOpen && (
-              <div className="ml-4 flex flex-col gap-1 mt-1">
+              <div className="ml-8 flex flex-col gap-1 mt-2 mb-4 animate-slide-down">
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat.slug}
                     onClick={() => goTo(`/posts?category=${cat.slug}`)}
-                    className="text-left px-4 py-2.5 rounded-xl text-gray-400 hover:text-cyan-400 hover:bg-cyan-500/10 transition-colors text-sm"
+                    className="text-left px-6 py-3 rounded-xl text-gray-500 hover:text-cyan-500 transition-colors text-[10px] font-black uppercase tracking-widest"
                   >
                     {t(`category.${cat.slug}`)}
                   </button>
@@ -297,37 +286,35 @@ const Header = () => {
             )}
           </div>
 
-          <div className="border-t border-white/10 my-2" />
+          <div className="h-px bg-white/5 my-4" />
 
-          {/* Language selector */}
-          <div className="px-1">
-            <p className="text-xs text-gray-400 flex items-center gap-1 px-3 mb-2">
-              <MdLanguage className="text-cyan-400" /> {t("language")}
+          <div>
+            <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest px-6 mb-4 flex items-center gap-2">
+              <MdLanguage className="text-cyan-500" /> {t("language")}
             </p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3">
               {LANGUAGES.map((lang) => (
                 <button
                   key={lang.code}
                   onClick={() => handleLanguageChange(lang.code)}
-                  className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm transition-all duration-150 ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-[10px] font-black tracking-widest transition-all ${
                     currentLang === lang.code
-                      ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400/30"
-                      : "text-gray-300 bg-white/5 hover:bg-white/10 hover:text-white"
+                      ? "bg-cyan-500 text-white shadow-lg shadow-cyan-500/20"
+                      : "text-gray-400 bg-white/5 hover:bg-white/10"
                   }`}
                 >
-                  <span className="text-base">{lang.flag}</span>
+                  <span className="text-lg">{lang.flag}</span>
                   <span>{lang.label}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="border-t border-white/10 my-2" />
+          <div className="h-px bg-white/5 my-6" />
 
-          {/* Logout */}
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors text-sm font-medium"
+            className="flex items-center gap-3 px-6 py-4 rounded-2xl text-red-400 hover:bg-red-500/10 transition-all text-[10px] font-black uppercase tracking-widest"
           >
             <CiLogout className="text-lg rotate-180" />
             {t("signOut")}
@@ -336,9 +323,10 @@ const Header = () => {
       </div>
 
       {/* Spacer */}
-      <div className="w-full h-16 md:h-20" aria-hidden="true" />
+      <div className="w-full h-16 md:h-24" aria-hidden="true" />
     </>
   );
 };
 
 export default Header;
+

@@ -1,27 +1,24 @@
 import React, { useEffect } from "react";
 import { api } from "../services/TokenAuth";
 import Header from "../components/Header";
-import { useLocation } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 
 // MUI imports
 import {
-  Card,
-  CardContent,
   Typography,
   Container,
   IconButton,
+  Tooltip
 } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
 import {
   Favorite as FavoriteIcon,
   Share as ShareIcon,
+  ArrowForward
 } from "@mui/icons-material";
 import { FaEye } from "react-icons/fa";
 
 import { categories } from "../constants/constant";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 const Posts = () => {
   const [data, setData] = React.useState<any[]>([]);
@@ -31,7 +28,6 @@ const Posts = () => {
     localStorage.getItem("language") || localStorage.setItem("language", "en");
   const params = new URLSearchParams(location.search);
   const selectedCategorySlug = params.get("category");
-
 
   const handlegetPosts = async (category?: string) => {
     try {
@@ -46,7 +42,6 @@ const Posts = () => {
     }
   };
 
-
   useEffect(() => {
     handlegetPosts(selectedCategorySlug || undefined);
   }, [selectedCategorySlug]);
@@ -56,123 +51,98 @@ const Posts = () => {
   );
   const { t } = useTranslation();
   const title = currentCategory
-    ? `${t(currentCategory.titleKey || `category.${currentCategory.slug}`)} Posts`
+    ? `${t(currentCategory.titleKey || `category.${currentCategory.slug}`)}`
     : t("popularPosts");
 
   return (
-    <div className="bg-black">
+    <div className="bg-black min-h-screen pb-20">
       <Header />
-      <Container className="bg-black h-auto">
-        <Typography
-          variant="h4"
-          gutterBottom
-          sx={{
-            mt: 3,
-            fontWeight: "bold",
-            color: "white",
-            borderBottom: "2px solid #358395",
-            width: "fit-content",
-            pb: 1,
-            mb: 4,
-          }}
-        >
-          {title}
-        </Typography>
+      <Container maxWidth="lg" className="mt-10 animate-fade-in">
+        <div className="flex flex-col mb-12">
+          <Typography
+            variant="h3"
+            className="text-white font-black !mb-2 tracking-tight"
+          >
+            {title} <span className="text-cyan-500">Posts</span>
+          </Typography>
+          <div className="h-1.5 w-24 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full" />
+        </div>
+
         {(data === null || data.length === 0) && (
-          <div className="text-red-500/80">
-            No content available for this category
+          <div className="glass p-10 rounded-3xl text-center border-red-500/20">
+            <Typography className="text-red-400 font-bold">
+              {t("noContentAvailable") || "No content available for this category"}
+            </Typography>
           </div>
         )}
 
-        <Grid container spacing={3}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {data.map((post: any) => (
-            <Grid xs={12} sm={6} md={4} key={post.id}>
-              <Card
-                sx={{
-                  height: "100%",
-                  transition: "0.3s",
-                  "&:hover": {
-                    transform: "scale(1.01)",
-                    boxShadow: 6,
-                  },
-                }}
-                className="on"
-              >
-                <CardContent
-                  className="border border-cyan-400"
-                  onClick={() => navigate(`/posts/post-detail/?id=${post.id}`)}
-                >
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${categories.find((c) => c.slug === post.category)?.bg || "bg-gray-600"}`}
-                  >
-                    {t(
-                      categories.find((c) => c.slug === post.category)
-                        ?.titleKey || `category.${post.category}`
-                    )}
-                  </span>
-                  {/* IMAGE */}
-                  {post.image && (
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      style={{
-                        width: "100%",
-                        marginTop: "10px",
-                        height: "200px",
-                        objectFit: "cover",
-                        borderRadius: "8px",
-                        marginBottom: "10px",
-                      }}
-                    />
-                  )}
+            <div 
+              key={post.id}
+              onClick={() => navigate(`/posts/post-detail/?id=${post.id}`)}
+              className="glass glass-hover rounded-[2rem] overflow-hidden flex flex-col group cursor-pointer animate-slide-up"
+            >
+              {/* Image Container */}
+              <div className="relative h-56 overflow-hidden">
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute top-4 left-4">
+                   <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider text-white ${categories.find((c) => c.slug === post.category)?.bg || "bg-gray-600 shadow-lg"}`}>
+                      {t(categories.find((c) => c.slug === post.category)?.titleKey || `category.${post.category}`)}
+                   </span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                   <span className="text-white font-bold flex items-center gap-2">
+                      Read Article <ArrowForward fontSize="small" />
+                   </span>
+                </div>
+              </div>
 
-                  <Typography variant="h5" gutterBottom className="text-center">
-                    {post.title}
-                  </Typography>
+              {/* Content */}
+              <div className="p-6 flex flex-col flex-1">
+                <div className="flex items-center gap-2 mb-3">
+                   <div className="w-6 h-6 rounded-full bg-cyan-500 flex items-center justify-center text-[10px] font-bold text-white">
+                      {post.author_name?.charAt(0)}
+                   </div>
+                   <span className="text-xs text-gray-400 font-medium">@{post.author_name}</span>
+                </div>
 
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    className="text-center"
-                  >
-                    {post.content?.slice(0, 300)}...
-                  </Typography>
+                <Typography variant="h5" className="text-white font-bold !mb-3 line-clamp-2 group-hover:text-cyan-400 transition-colors">
+                  {post.title}
+                </Typography>
 
-                  <Typography variant="caption">
-                    Author: <b>@{post.author_name}</b>
-                  </Typography>
-                  <div className="flex justify-end gap-1 mt-2">
-                    <IconButton
-                      aria-label="add to favorites"
-                      sx={{ color: "red" }}
-                    >
-                      <FavoriteIcon />
-                      <sub className="text-red/70 text-sm">
-                        {post?.likes_count || 0}
-                      </sub>
-                    </IconButton>
-                    <IconButton>
-                      <FaEye className="text-[#358395]" />
-                      <sub className="text-blue/70 text-sm">
-                        {post?.views || 0}
-                      </sub>
-                    </IconButton>
-                    <IconButton
-                      aria-label="share"
-                      sx={{ color: "blue" }}
-                      className=""
-                    >
-                      <ShareIcon />
-                    </IconButton>
+                <Typography variant="body2" className="text-gray-400 !mb-6 line-clamp-3 opacity-80">
+                  {post.content}
+                </Typography>
+
+                <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1">
+                      <FavoriteIcon className="text-red-500/80 !text-lg" />
+                      <span className="text-xs text-gray-400 font-bold">{post?.likes_count || 0}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <FaEye className="text-cyan-500/80 text-sm" />
+                      <span className="text-xs text-gray-400 font-bold">{post?.views || 0}</span>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            </Grid>
+                  
+                  <IconButton size="small" className="!text-gray-500 hover:!text-white transition-colors">
+                    <ShareIcon fontSize="small" />
+                  </IconButton>
+                </div>
+              </div>
+            </div>
           ))}
-        </Grid>
+        </div>
       </Container>
     </div>
   );
 };
 
 export default Posts;
+

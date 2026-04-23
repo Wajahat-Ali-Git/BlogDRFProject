@@ -7,9 +7,9 @@ from django.db.models import Count
 from django.db.models import F
 from rest_framework import status
 from .utils.translate import translate_text
-
 from .models import Post, Category, Like
 from .serializers import PostSerializer, CategorySerializer
+from .utils.gemini import generate_titles, improve_content
 
 
 # -------------------------
@@ -127,6 +127,7 @@ class PostListCreateAPI(generics.ListCreateAPIView):
 class PostdetailAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly,
         IsAuthorOrReadOnly,
@@ -232,3 +233,29 @@ class PopularPostsAPI(generics.ListAPIView):
             data = _translate_post_list(queryset, data, lang)
 
         return Response(data)
+
+    # blog/views.py
+
+
+class AIGenerateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        content = request.data.get("content")
+        action = request.data.get("action")  # "title" or "improve"
+
+        if not content:
+            return Response({"error": "Content is required"}, status=400)
+
+        try:
+            if action == "title":
+                result = generate_titles(content)
+            elif action == "improve":
+                result = improve_content(content)
+            else:
+                return Response({"error": "Invalid action"}, status=400)
+
+            return Response({"result": result})
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)

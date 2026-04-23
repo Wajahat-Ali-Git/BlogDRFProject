@@ -8,14 +8,16 @@ from .views import (
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import AIGenerateView
 
 urlpatterns = [
     path("categories/", CategoryListCreateAPI.as_view(), name="category-list-create"),
     path("posts/", PostListCreateAPI.as_view(), name="post-list-create"),
     path("posts/<int:pk>/", PostdetailAPI.as_view(), name="post-detail"),
-     # 🔥 popular posts
+    # 🔥 popular posts
     path("posts/popular/", PopularPostsAPI.as_view()),
     path("posts/<int:post_id>/like/", ToggleLikeAPI.as_view()),
+    path("ai/generate/", AIGenerateView.as_view()),
 ]
 
 if settings.DEBUG:
